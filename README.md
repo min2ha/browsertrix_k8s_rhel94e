@@ -60,19 +60,59 @@ At a high level, we expect the scope of CRI-O to be restricted to the following 
 
 Issues with CRI-O installation on rhel 9: https://github.com/cri-o/cri-o/issues/5905
 
+https://kubernetes.io/blog/2023/10/10/cri-o-community-package-infrastructure/
 
-Possible Workaround to install CRI-O:
+Add the Kubernetes repo 
+
 ```
-curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
-curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
-yum install cri-o
+cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+EOF
 ```
 
+Add the CRI-O repo 
+```
+cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
+[cri-o]
+name=CRI-O
+baseurl=https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/addons:/cri-o:/prerelease:/main/rpm/repodata/repomd.xml.key
+EOF
+```
+
+Install official package dependencies 
+```
+dnf install -y \
+    conntrack \
+    container-selinux \
+    ebtables \
+    ethtool \
+    iptables \
+    socat
+```
+
+Install the packages from the added repos 
+```
+dnf install -y --repo cri-o --repo kubernetes \
+    cri-o \
+    kubeadm \
+    kubectl \
+    kubelet
+```
+
+
+Jump to step 5 or
 
 TODO: alternatives CRI-O 
 - ContainerD
 - Docker
-
 
 
 3 configure yum repo for docker
@@ -83,12 +123,15 @@ TODO: alternatives CRI-O
   gpgcheck=0
 ```
 
-5 install docker for rhel8 --nobest and enable docker
+4 install docker for rhel8 --nobest and enable docker
 ```
   yum install docker-ce --nobest -y
 ```
 
-6 Configuring yum repo for k8s cmds
+
+
+
+5 Configuring yum repo for k8s cmds
   refer k8s docs
 
 6 Installing kubectl kubeadm kubelet
