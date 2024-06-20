@@ -190,8 +190,7 @@ dnf install -y --repo cri-o --repo kubernetes \
 systemctl start crio.service
 ```
 
-Jump to step 5 or
-
+### Jump to step 11 
 
 TODO: alternatives CRI-O 
 - ContainerD
@@ -305,9 +304,23 @@ Install Calico
 
 https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
 
+1.
+```
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+
+```
+2.
+```
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+
+```
 
 Watch and Wait
+```
+watch kubectl get pods -n calico-system
+```
 
+Check  
 ```
 root@kmasterrhel91 vagrant]# kubectl get nodes -o wide
 NAME                        STATUS   ROLES           AGE   VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION                 CONTAINER-RUNTIME
@@ -337,9 +350,10 @@ sudo yum update
 
 ```
 
-# Install kubectl
+# Install kubectl 
+## (only if needed!)
 
-Snap will be used to install kubectl
+Snap could be used to install kubectl too
 ```
 sudo snap install kubectl --classic
 ```
