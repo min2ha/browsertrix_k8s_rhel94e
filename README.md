@@ -26,6 +26,84 @@ REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
 REDHAT_SUPPORT_PRODUCT_VERSION="9.4"
 ```
 
+
+# Register and automatically subscribe in one step
+
+```
+subscription-manager register --username <username> --password <password> --auto-attach
+```
+
+
+# Preparation
+
+# (ALL NODES)
+
+## Disable swap space
+```
+sudo swapoff -a
+```
+
+comment in /etc/fstab
+
+
+## Disable SELinux
+Since kubelet has improvable support for SELinux, the upstream documentation recommends to set it to permissive mode (which basically disables SELinux).
+
+```
+# Set SELinux to permissive mode
+setenforce 0
+
+# Make setting persistent
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+```
+
+
+
+## Letting iptables see bridged traffic
+### (ALL NODES) Enabling “overlay” and “br_netfilter” kernel modules-
+
+```
+cat <<EOF > /etc/modules-load.d/crio-net.conf
+overlay
+br_netfilter
+EOF
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+
+cat <<EOF > /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+```
+
+
+## Master node
+
+```
+sudo firewall-cmd --permanent --add-port=6443/tcp
+sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+sudo firewall-cmd --permanent --add-port=10250/tcp
+sudo firewall-cmd --permanent --add-port=10251/tcp
+sudo firewall-cmd --permanent --add-port=10252/tcp
+sudo firewall-cmd --reload
+```
+
+## Worker node
+
+```
+sudo firewall-cmd --permanent --add-port=10250/tcp
+sudo firewall-cmd --permanent --add-port=30000-32767/tcp   
+sudo firewall-cmd --reload
+```
+
+
+
 # Install Kubernetes
 https://kubernetes.io/docs/setup/
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
@@ -107,6 +185,10 @@ dnf install -y --repo cri-o --repo kubernetes \
     kubelet
 ```
 
+# Start CRI-O 
+```
+systemctl start crio.service
+```
 
 Jump to step 5 or
 
@@ -158,7 +240,9 @@ refer k8s docs -  ?? sudo modprobe br_netfilter
   sudo sysctl --system
 ```
 
-10 docker change cgroup driver to systemd, FOR getting logs from containers
+
+10 (if docker used only!) 
+docker change cgroup driver to systemd, FOR getting logs from containers
    ```
    ExecStart=/usr/bin/dockerd --exec-opt native.cgroupdriver=systemd
    ```
@@ -173,7 +257,7 @@ refer k8s docs -  ?? sudo modprobe br_netfilter
    systemctl restart docker
    ```
 
-11 
+11 (TODO: check if its overlapping)
    ```
    yum install -y iproute-tc
    ```
@@ -185,7 +269,7 @@ refer k8s docs -  ?? sudo modprobe br_netfilter
    #comment swap line
    ```
 
-13 mac addess and product_uuid should be different for every node
+13 Extra check: mac addess and product_uuid should be different for every node
    ```
    cat /sys/class/dmi/id/product_uuid
    ```
@@ -194,15 +278,39 @@ refer k8s docs -  ?? sudo modprobe br_netfilter
 
 
 
-# Kubernetes cluster init
+# Kubernetes cluster setup
 ```
- sudo kubeadm init --control-plane-endpoint="192.168.1.209:6443" --upload-certs --pod-network-cidr=192.168.0.0/16
+systemctl enable --now crio && systemctl enable --now kubelet
+```
+
+
+## Kubernetes cluster init
+
+Since CRI-O was chosen as the container runtime the correct cgroup driver to be used by kubelet has to be set.
+```
+echo "KUBELET_EXTRA_ARGS=--cgroup-driver=systemd" | tee /etc/sysconfig/kubelet
+
+```
+
+
+Put correct IP of your master node, for example 192.168.121.51
+```
+ sudo kubeadm init --control-plane-endpoint="192.168.121.51:6443" --upload-certs --pod-network-cidr=192.168.0.0/16
 ```
 # Kubernetes cluster Reset
 
 ```
  sudo kubeadm reset
  ```
+
+# Prepare to start using cluster
+To start using your cluster, you need to run the following as a regular user:
+
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
 
 
 # Install Snap
