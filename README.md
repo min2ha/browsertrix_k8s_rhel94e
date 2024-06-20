@@ -192,11 +192,13 @@ systemctl start crio.service
 
 Jump to step 5 or
 
+
 TODO: alternatives CRI-O 
 - ContainerD
 - Docker
 
-
+<s>like this
+ --
 3 configure yum repo for docker
 ```
   vim /etc/yum.repos.d/docker.repo
@@ -204,40 +206,11 @@ TODO: alternatives CRI-O
   baseurl=https://download.docker.com/linux/cen...
   gpgcheck=0
 ```
+--
 
 4 install docker for rhel8 --nobest and enable docker
 ```
   yum install docker-ce --nobest -y
-```
-
-
-
-
-5 Configuring yum repo for k8s cmds
-  refer k8s docs
-
-6 Installing kubectl kubeadm kubelet
-```
-  sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-```
-7 Disable Selinux permanently
-  Set SELinux in permissive mode (effectively disabling it)
-  ```
-  sudo setenforce 0
-  #permanently disable Selinux
-  sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-  ```
-
-8 Permanently enabled kubelet service
-```
-  sudo systemctl enable --now kubelet
-```
-
-9 letting iptables see bridged traffic.
-
-refer k8s docs -  ?? sudo modprobe br_netfilter
-```
-  sudo sysctl --system
 ```
 
 
@@ -257,7 +230,11 @@ docker change cgroup driver to systemd, FOR getting logs from containers
    systemctl restart docker
    ```
 
-11 (TODO: check if its overlapping)
+   </s>
+
+
+
+11 (TODO: check if its not overlapping)
    ```
    yum install -y iproute-tc
    ```
@@ -283,6 +260,10 @@ docker change cgroup driver to systemd, FOR getting logs from containers
 systemctl enable --now crio && systemctl enable --now kubelet
 ```
 
+```
+# Make sure to reboot to have layered packages available
+systemctl reboot
+```
 
 ## Kubernetes cluster init
 
@@ -310,6 +291,27 @@ To start using your cluster, you need to run the following as a regular user:
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+```
+kubectl get pods --all-namespaces
+```
+
+## Install CNI
+### Calico
+https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements
+
+Install Calico
+
+https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+
+
+Watch and Wait
+
+```
+root@kmasterrhel91 vagrant]# kubectl get nodes -o wide
+NAME                        STATUS   ROLES           AGE   VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION                 CONTAINER-RUNTIME
+kmasterrhel91.example.com   Ready    control-plane   19m   v1.28.11   192.168.121.51   <none>        Red Hat Enterprise Linux 9.4 (Plow)   5.14.0-427.22.1.el9_4.x86_64   cri-o://1.31.0
 ```
 
 
