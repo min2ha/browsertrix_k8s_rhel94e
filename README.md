@@ -140,7 +140,8 @@ Issues with CRI-O installation on rhel 9: https://github.com/cri-o/cri-o/issues/
 
 https://kubernetes.io/blog/2023/10/10/cri-o-community-package-infrastructure/
 
-Add the Kubernetes repo 
+
+Add the Kubernetes repo - choose one of two below
 
 ### Version 1.28
 
@@ -319,6 +320,8 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+Log off, log in (in case of terminal)
+
 ```
 kubectl get pods --all-namespaces
 ```
@@ -376,6 +379,8 @@ sudo yum update
  sudo ln -s /var/lib/snapd/snap /snap
 
 ```
+Log off, log in (in case of terminal)
+
 
 # Install kubectl 
 ## (only if needed!)
