@@ -157,6 +157,7 @@ EOF
 
 ### Version 1.30
 
+```
 cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -165,11 +166,11 @@ enabled=1
 gpgcheck=1
 gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 EOF
-
+```
 
 ### Add the CRI-O repo 
 
-Current prerelease version was 1,31
+Current CRI-O prerelease version was 1,31
 
 ```
 cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
