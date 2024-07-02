@@ -367,7 +367,7 @@ The EPEL repository can be added to RHEL 9 with the following command:
 sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 sudo dnf upgrade
 ```
-Adding the optional and extras repositories is also recommended:
+Adding the optional and extras repositories is also recommended (if errors nevermind):
 ```
 sudo subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"
 sudo yum update
