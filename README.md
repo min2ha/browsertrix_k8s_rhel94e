@@ -142,6 +142,8 @@ https://kubernetes.io/blog/2023/10/10/cri-o-community-package-infrastructure/
 
 Add the Kubernetes repo 
 
+### Version 1.28
+
 ```
 cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -153,7 +155,22 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
 EOF
 ```
 
-Add the CRI-O repo 
+### Version 1.30
+
+cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
+EOF
+
+
+### Add the CRI-O repo 
+
+Current prerelease version was 1,31
+
 ```
 cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
 [cri-o]
@@ -183,6 +200,13 @@ dnf install -y --repo cri-o --repo kubernetes \
     kubeadm \
     kubectl \
     kubelet
+```
+
+```
+Installed:
+  cri-o-1.31.0~dev-150500.73.1.x86_64       cri-tools-1.30.0-150500.1.1.x86_64       kubeadm-1.30.2-150500.1.1.x86_64            
+  kubectl-1.30.2-150500.1.1.x86_64          kubelet-1.30.2-150500.1.1.x86_64         kubernetes-cni-1.4.0-150500.1.1.x86_64      
+
 ```
 
 # Start CRI-O 
@@ -229,7 +253,6 @@ docker change cgroup driver to systemd, FOR getting logs from containers
    systemctl restart docker
    ```
 
-   </s>
 
 
 
@@ -238,6 +261,9 @@ docker change cgroup driver to systemd, FOR getting logs from containers
    yum install -y iproute-tc
    ```
    useful package for vm connectivity
+
+</s>
+
 
 12 Disabling swap in ram
    ```
