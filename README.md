@@ -324,6 +324,7 @@ Log off, log in (in case of terminal)
 
 ```
 kubectl get pods --all-namespaces
+kubectl get all --all-namespaces -o wide
 ```
 
 ## Install CNI
