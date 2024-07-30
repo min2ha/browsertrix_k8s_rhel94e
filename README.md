@@ -371,6 +371,10 @@ modprobe br_netfilter
 sysctl -w net.ipv4.ip_forward=1
 ```
 
+Quickstart for Calico on Kubernetes (CNI part)
+https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart
+
+
 By default, in order to init cluster with defalt params, it's suficient to run command:
 ```
 kubeadm init
