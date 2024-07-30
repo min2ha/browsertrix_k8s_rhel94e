@@ -176,15 +176,18 @@ baseurl=https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/rpm/
 enabled=1
 gpgcheck=1
 gpgkey=https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/rpm/repodata/repomd.xml.key
-EOF```
+EOF
+```
 
 
 Install package dependencies from the official repositories
+
 ```
 dnf install -y container-selinux
 ```
 
 Install the packages
+
 ```
 dnf install -y cri-o kubelet kubeadm kubectl
 ```
@@ -220,7 +223,7 @@ EOF
 
 ### Add the CRI-O repo manually (prerelease for example)
 
-Current CRI-O prerelease version was 1,31
+Current CRI-O prerelease version was 1.31
 
 ```
 cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
