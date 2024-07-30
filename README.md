@@ -342,9 +342,15 @@ docker change cgroup driver to systemd, FOR getting logs from containers
 
 
 # Kubernetes cluster setup
+
+Enable crio and kubelet services:
+
 ```
 systemctl enable --now crio && systemctl enable --now kubelet
 ```
+
+'Enable' will hook the specified unit into relevant places, so that it will automatically start on boot, or when relevant hardware is plugged in, or other situations depending on what's specified in the unit file.
+
 
 ```
 # Make sure to reboot to have layered packages available
