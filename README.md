@@ -387,6 +387,9 @@ kubectl get all --all-namespaces -o wide
 ```
 
 ## Install CNI
+
+https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/
+
 ### Calico
 https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements
 
