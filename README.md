@@ -3,6 +3,8 @@
 
 # RedHat 9.4 Enterprise, Server
 
+In the beginning of installation users can select to install presets automatically. In this case default very basic presets were selected: development, networking, virtualization. 
+
 ```
 cat /etc/os-release
 
@@ -134,7 +136,7 @@ At a high level, we expect the scope of CRI-O to be restricted to the following 
 - Resource isolation as required by the CRI
 
 
-(References: https://github.com/cri-o/cri-o, https://github.com/cri-o/cri-o/blob/main/install.md)
+(References: https://github.com/cri-o/cri-o, https://github.com/cri-o/cri-o, https://github.com/cri-o/cri-o/blob/main/install.md)
 
 Issues with CRI-O installation on rhel 9: https://github.com/cri-o/cri-o/issues/5905
 
