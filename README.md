@@ -359,11 +359,30 @@ echo "KUBELET_EXTRA_ARGS=--cgroup-driver=systemd" | tee /etc/sysconfig/kubelet
 
 ```
 
+```
+swapoff -a
+modprobe br_netfilter
+sysctl -w net.ipv4.ip_forward=1
+```
 
-Put correct IP of your master node, for example 192.168.121.51
+By default, in order to init cluster with defalt params, it's suficient to run command:
+```
+kubeadm init
+```
+
+In order to use Calico CNI, init cluster command needs extra pod-network-cidr param:
+```
+kubeadm init --pod-network-cidr=192.168.0.0/16
+```
+
+(Classless Inter-Domain Routing (CIDR) is an IP address allocation method that improves data routing efficiency on the internet.)
+
+
+It's possible to specify IP address of master node, for example 192.168.121.51
 ```
  sudo kubeadm init --control-plane-endpoint="192.168.121.51:6443" --upload-certs --pod-network-cidr=192.168.0.0/16
 ```
+
 # Kubernetes cluster Reset
 
 ```
