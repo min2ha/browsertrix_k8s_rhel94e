@@ -501,3 +501,21 @@ helm repo add browsertrix https://docs.browsertrix.com/helm-repo/
 helm upgrade --install btrix browsertrix/browsertrix
 ```
 
+# Kubernetes completely uninstall
+
+
+```
+kubectl drain <node name> — delete-local-data — force — ignore-daemonsets
+kubectl delete node <node name>
+```
+
+```
+kubeadm reset 
+```
+
+```
+sudo yum remove kubeadm kubectl kubelet kubernetes-cni kube*
+sudo yum autoremove
+ 
+sudo rm -rf ~/.kube
+```
