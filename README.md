@@ -109,14 +109,24 @@ sudo firewall-cmd --reload
 # Install Kubernetes
 https://kubernetes.io/docs/setup/
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-
+https://github.com/cri-o/packaging
 
 ## Steps:
 
+Configure yum repo for dvd and permanently mount it in /etc/rc.local
 
-2 Configure yum repo for dvd and permanently mount it in /etc/rc.local
+(depends on installed preset of packages in the beginning, next command may be redundant, but it won't break anything anyway)
 ```
   yum install net-tools vim -y
+```
+
+## Kubernetes and CRI-O Container Engine
+
+Define versions:
+
+```
+KUBERNETES_VERSION=v1.30
+CRIO_VERSION=v1.30
 ```
 
 
@@ -142,8 +152,45 @@ Issues with CRI-O installation on rhel 9: https://github.com/cri-o/cri-o/issues/
 
 https://kubernetes.io/blog/2023/10/10/cri-o-community-package-infrastructure/
 
+### Add the Kubernetes repository
 
-Add the Kubernetes repo - choose one of two below
+```
+cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/rpm/repodata/repomd.xml.key
+EOF
+```
+
+
+### Add the CRI-O repository
+
+```
+cat <<EOF | tee /etc/yum.repos.d/cri-o.repo
+[cri-o]
+name=CRI-O
+baseurl=https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/rpm/repodata/repomd.xml.key
+EOF```
+
+
+Install package dependencies from the official repositories
+```
+dnf install -y container-selinux
+```
+
+Install the packages
+```
+dnf install -y cri-o kubelet kubeadm kubectl
+```
+
+
+You can Add the Kubernetes repo version manually too - for example choose one of two below
 
 ### Version 1.28
 
@@ -171,7 +218,7 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 EOF
 ```
 
-### Add the CRI-O repo 
+### Add the CRI-O repo manually (prerelease for example)
 
 Current CRI-O prerelease version was 1,31
 
