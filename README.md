@@ -202,8 +202,10 @@ Installed:
   libnetfilter_queue-1.0.5-1.el9.x86_64        socat-1.7.4.1-5.el9_4.2.x86_64
 ```
 
+## Optionally the Kubernetes repo version could be defined manually too - for example choose one of two below
 
-You can Add the Kubernetes repo version manually too - for example choose one of two below
+If not interrested skip and jump to Start CRI-O section Otherwise.
+
 
 ### Version 1.28
 
