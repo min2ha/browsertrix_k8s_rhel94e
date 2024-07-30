@@ -192,6 +192,16 @@ Install the packages
 dnf install -y cri-o kubelet kubeadm kubectl
 ```
 
+Installation results:
+
+```
+Installed:
+  conntrack-tools-1.4.7-2.el9.x86_64           cri-o-1.30.3-150500.1.1.x86_64                  cri-tools-1.30.0-150500.1.1.x86_64
+  kubeadm-1.30.3-150500.1.1.x86_64             kubectl-1.30.3-150500.1.1.x86_64                kubelet-1.30.3-150500.1.1.x86_64
+  kubernetes-cni-1.4.0-150500.1.1.x86_64       libnetfilter_cthelper-1.0.0-22.el9.x86_64       libnetfilter_cttimeout-1.0.0-19.el9.x86_64
+  libnetfilter_queue-1.0.5-1.el9.x86_64        socat-1.7.4.1-5.el9_4.2.x86_64
+```
+
 
 You can Add the Kubernetes repo version manually too - for example choose one of two below
 
@@ -256,12 +266,7 @@ dnf install -y --repo cri-o --repo kubernetes \
     kubelet
 ```
 
-```
-Installed:
-  cri-o-1.31.0~dev-150500.73.1.x86_64       cri-tools-1.30.0-150500.1.1.x86_64       kubeadm-1.30.2-150500.1.1.x86_64            
-  kubectl-1.30.2-150500.1.1.x86_64          kubelet-1.30.2-150500.1.1.x86_64         kubernetes-cni-1.4.0-150500.1.1.x86_64      
 
-```
 
 # Start CRI-O 
 ```
