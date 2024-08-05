@@ -507,7 +507,7 @@ sudo firewall-cmd --permanent --zone=${name} --add-interface=vxlan.calico
 sudo firewall-cmd --permanent --zone=${name} --add-interface="cali+"
 sudo firewall-cmd --reload
 ```
-(you can check on your local machine virtual networks created by Calico `ip a`), for example results looks like: 
+(you can check on your local machine virtual networks created by Calico `ip a`). Example, where result is: 
 ```
 5: calic97d13720a8@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
     link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netns 2506f3b6-a7ce-45dd-b1ca-6cdf27158aca
@@ -523,6 +523,18 @@ sudo firewall-cmd --reload
     link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netns 8b60bedc-d237-4270-9a56-55715b2263f3
     inet6 fe80::ecee:eeff:feee:eeee/64 scope link
        valid_lft forever preferred_lft forever
+```
+
+#### Troublesooting 
+
+In case of multiple resets of K8s cluster, iptables could be reset
+```
+iptables -F && iptables -t nat -F && iptables -t mangle -F && iptables -X
+```
+
+In case of not starting some pod, use describe to see the issues:
+```
+kubectl describe pods/calico-node-wh4fk -n calico-system
 ```
 
 
