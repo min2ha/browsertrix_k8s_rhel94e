@@ -430,6 +430,12 @@ NAME       STATUS     ROLES           AGE     VERSION
 rhel94     NotReady   control-plane   9m27s   v1.30.3
 rhel94-2   NotReady   <none>          7m4s    v1.29.7
 rhel94-3   NotReady   <none>          16s     v1.30.3
+
+[root@rhel94 root]# kubectl get nodes -o wide
+NAME       STATUS     ROLES           AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION                 CONTAINER-RUNTIME
+rhel94     NotReady   control-plane   11m     v1.30.3   192.168.1.109   <none>        Red Hat Enterprise Linux 9.4 (Plow)   5.14.0-427.28.1.el9_4.x86_64   cri-o://1.31.0
+rhel94-2   NotReady   <none>          9m36s   v1.29.7   192.168.1.127   <none>        Red Hat Enterprise Linux 9.4 (Plow)   5.14.0-427.28.1.el9_4.x86_64   cri-o://1.31.0
+rhel94-3   NotReady   <none>          2m48s   v1.30.3   192.168.1.111   <none>        Red Hat Enterprise Linux 9.4 (Plow)   5.14.0-427.28.1.el9_4.x86_64   cri-o://1.30.4
 ```
 
 https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/
