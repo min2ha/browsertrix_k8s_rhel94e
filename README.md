@@ -471,6 +471,23 @@ kmasterrhel91.example.com   Ready    control-plane   19m   v1.28.11   192.168.12
 ```
 
 
+In case of `Pending` 
+```
+kubectl describe pods/calico-typha-747f98cbd5-5fsbx -n calico-system
+```
+
+add to Calico custom-resources.yaml the section:
+
+```
+  controlPlaneTolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+```
+
+
+
 # Install Snap
 
 Snap will be used for kubectl and HELM installation.
