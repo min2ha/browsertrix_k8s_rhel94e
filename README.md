@@ -497,6 +497,18 @@ add to Calico custom-resources.yaml the section:
 Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
 https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements
 
+```
+sudo firewall-cmd --permanent --add-port=179/tcp
+sudo firewall-cmd --permanent --add-port=4789/udp
+sudo firewall-cmd --permanent --add-port=5473/tcp
+sudo firewall-cmd --permanent --add-port=51820/udp
+sudo firewall-cmd --permanent --add-port=51821/udp
+sudo firewall-cmd --permanent --add-port=4789/udp
+
+sudo firewall-cmd --reload
+```
+
+
 (For initial testing its better to disable Firewall on `control-plane` node)
 
 ```
