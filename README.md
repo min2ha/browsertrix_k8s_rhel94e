@@ -423,6 +423,14 @@ If you discovered, that nodes in cluster are in `Ready` state already, you may s
 Here is a tutorial that talks about this subject:
 https://www.tigera.io/tutorials/?_sf_s=Calico%20Basics
 
+`NotReady` status: 
+```
+[root@rhel94 root]# kubectl get nodes
+NAME       STATUS     ROLES           AGE     VERSION
+rhel94     NotReady   control-plane   9m27s   v1.30.3
+rhel94-2   NotReady   <none>          7m4s    v1.29.7
+rhel94-3   NotReady   <none>          16s     v1.30.3
+```
 
 https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/
 
@@ -451,7 +459,7 @@ watch kubectl get pods -n calico-system
 
 Check  
 ```
-root@kmasterrhel91 vagrant]# kubectl get nodes -o wide
+root@kmasterrhel91]# kubectl get nodes -o wide
 NAME                        STATUS   ROLES           AGE   VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION                 CONTAINER-RUNTIME
 kmasterrhel91.example.com   Ready    control-plane   19m   v1.28.11   192.168.121.51   <none>        Red Hat Enterprise Linux 9.4 (Plow)   5.14.0-427.22.1.el9_4.x86_64   cri-o://1.31.0
 ```
