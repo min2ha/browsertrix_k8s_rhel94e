@@ -417,6 +417,11 @@ kubectl get all --all-namespaces -o wide
 
 ## Install CNI
 
+Container Network Interface (CNI) is a framework for dynamically configuring networking resources.
+
+
+#### Initial state before CNI
+
 (BEWARE! A node without a CNI becomes ready when the CRI on that host picks up the CNI, overlay is not mandatory in Kubernetes.)
 If you discovered, that nodes in cluster are in `Ready` state already, you may skip Calico deployment. 
 
@@ -486,6 +491,39 @@ add to Calico custom-resources.yaml the section:
       effect: NoSchedule
 ```
 
+
+#### Firewall
+
+Ensure that your hosts and firewalls allow the necessary traffic based on your configuration.
+https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements
+
+(For initial testing its better to disable Firewall on `control-plane` node)
+
+```
+name=kubeAccept
+sudo firewall-cmd --permanent --new-zone=${name}
+sudo firewall-cmd --permanent --zone=${name} --set-target=ACCEPT
+sudo firewall-cmd --permanent --zone=${name} --add-interface=vxlan.calico
+sudo firewall-cmd --permanent --zone=${name} --add-interface="cali+"
+sudo firewall-cmd --reload
+```
+(you can check on your local machine virtual networks created by Calico `ip a`), for example results looks like: 
+```
+5: calic97d13720a8@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netns 2506f3b6-a7ce-45dd-b1ca-6cdf27158aca
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
+8: vxlan.calico: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ether 66:01:39:c5:72:8a brd ff:ff:ff:ff:ff:ff
+    inet 192.168.124.0/32 scope global vxlan.calico
+       valid_lft forever preferred_lft forever
+    inet6 fe80::6401:39ff:fec5:728a/64 scope link
+       valid_lft forever preferred_lft forever
+11: cali753d41897d0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netns 8b60bedc-d237-4270-9a56-55715b2263f3
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
+```
 
 
 # Install Snap
