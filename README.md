@@ -500,7 +500,7 @@ https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements
 (For initial testing its better to disable Firewall on `control-plane` node)
 
 ```
-name=kubeAccept
+name=K8sClusterAccept
 sudo firewall-cmd --permanent --new-zone=${name}
 sudo firewall-cmd --permanent --zone=${name} --set-target=ACCEPT
 sudo firewall-cmd --permanent --zone=${name} --add-interface=vxlan.calico
