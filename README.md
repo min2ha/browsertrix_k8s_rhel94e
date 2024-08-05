@@ -418,7 +418,11 @@ kubectl get all --all-namespaces -o wide
 ## Install CNI
 
 (BEWARE! A node without a CNI becomes ready when the CRI on that host picks up the CNI, overlay is not mandatory in Kubernetes.)
-If you see, that nodes in ckuster are in `Ready` state already, you may skip Calico deployment. 
+If you discovered, that nodes in cluster are in `Ready` state already, you may skip Calico deployment. 
+
+Here is a tutorial that talks about this subject:
+https://www.tigera.io/tutorials/?_sf_s=Calico%20Basics
+
 
 https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/
 
